@@ -513,7 +513,7 @@ async function getPKey() {
             secret,
             decodedBinarySecret;
         // Create a Secrets Manager client
-        AWS.config.loadFromPath('./config1.json');
+        AWS.config.loadFromPath('./awsConfig.json');
         var client = new AWS.SecretsManager({
             region: region
         });
