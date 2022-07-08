@@ -3,11 +3,6 @@
           "user": "CATOSHI",
           "pass": "CATOSHI"
     },
-    "connectionURLAVAX1": "https://bsc-dataseed.binance.org/",
-    "connectionURLHBAR1": "https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
-    "connectionURLAVAX": "https://data-seed-prebsc-1-s1.binance.org:8545/",
-    "connectionURLHBAR": "https://evm-cronos.crypto.org",
-    "adminAddress": "0x24EEc2380e2EcfA160B7Fe14738B66d7873c9523",
-    "AvaxChainId": "0x19",
-    "HbarChainId": "0x38"
+    "connectionURLAVAX": "https://rpc.ankr.com/avalanche_fuji",
+    "connectionURLHBAR": "https://data-seed-prebsc-2-s2.binance.org:8545"
 }

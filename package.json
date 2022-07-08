@@ -1,14 +1,14 @@
 {
-  "name": "node-api-catoshi",
+  "name": "Apex-bridge-backend",
   "version": "1.0.0",
-  "description": "catoshi backend apis",
+  "description": "Apex backend apis",
   "main": "index.js",
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www",
     "debug": "ndb ./bin/www"
   },
-  "author": "Nirmit",
+  "author": "Spade-tech",
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "^2.987.0",

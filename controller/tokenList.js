@@ -6,33 +6,33 @@ const { async } = require("crypto-random-string");
 
 
 toChainId = {
-    BSC : "97",
-    CRO : "25",
+    HBAR : "97", // HBAR chain id -> 298 
+    AVAX : "43113", // avax Mainnet -> 43114
 }
 
 tokenList = {
-    CROGE:
+    HBAR:
     {
-        name: "CROGE",
-        symbol: "CROGE",
-        decimal: 9,
+        name: "HBAR",
+        symbol: "HBAR",
+        decimal: 18,
         tokenAddress: {
-            BSC: "0x0c069b40f7FD21BaE669319ca726dB6403288057",
-            CRO: "0xC4a174cCb5fb54a6721e11e0Ca961e42715023F9"
+            HBAR: "0x0000000000000000000000000000000000000000",
+            AVAX: "0x0b02dc9d30c1a9fdbcf07cb317334ddd8b266034"
 
         },
         tokenAbi: {
             BSC: require('./ABI/tokenAbi.json'),
-            CRO: require('./ABI/tokenAbi.json')
+            AVAX: require('./ABI/wrappedTokenABI.json')
 
         },
         bridgeAddress: {
-            BSC: "0x9015e4c1618B441B4e5aCfaD24c51a6dc408265b",
-            CRO: "0x9015e4c1618B441B4e5aCfaD24c51a6dc408265b"
+            HBAR: "0xD0b3b3eE3c828D62d62191BBf0A4672e3defddFF",
+            AVAX: "0xd41cdEEE1be56232f80b427053D41Cd9D11C051F"
         },
         bridgeAbi: {
-            BSC: require('./ABI/bridgeBSCAbi.json'),
-            CRO: require('./ABI/bridgeEthAbi.json')
+            HBAR: require('./ABI/bridgeHBARAbi.json'),
+            AVAX: require('./ABI/bridgeAVAXAbi.json')
 
         },
     }
@@ -45,40 +45,6 @@ tokenList = {
 module.exports = {
 
 
-    // fetchAbis: async (req, res) => {
-    //     try {
-    //         let tokenId = ''
-    //         if (req.query.tokenId == null) {
-    //             return res.send({ "status": "false", "message": "tokenId not found" })
-    //         } else {
-    //             tokenId = (req.query.tokenId);
-    //         }
-    //         if (tokenId > tokenList.length - 1)
-    //             return res.send({ "status": "false", "message": "tokenId out of index" })
-
-    //         res.send({
-    //             "status": "true",
-    //             "message": "Contract ABIs fetched",
-    //             "details": tokenList[token]
-
-    //             // "addresses": {
-    //             //     contract_address_eth: catoshiFTMContractAddress,
-    //             //     contract_abi_eth: catoshiFTMAbi,
-    //             //     chain_id_eth: chainId,
-    //             //     rpc_url_eth: connectionURLFTM,
-    //             //     contract_address_bsc: catoshiBSCContractAddress,
-    //             //     contract_abi_bsc: catoshiBSCAbi,
-    //             //     chain_id_bsc: chainId1,
-    //             //     rpc_url_bsc: connectionURLBSC,
-    //             //     admin_address: adminAddresses
-    //             // }
-    //         })
-    //     } catch (err) {
-    //         console.log("error in fetching Contract ABIs !", err)
-    //         res.send({ "status": "false", "error": err, "message": 'Error in fetching Contract ABIs !' })
-    //     }
-    // },
-
     tokenList: () => {
         return tokenList
     },
@@ -87,11 +53,12 @@ module.exports = {
         return toChainId[network]
     },
 
-    tokenAddress: (token, network) => {
-        token = tokenList[token]["tokenAddress"][network]
+    tokenDetails: (token, network) => {
+        address = tokenList[token]["tokenAddress"][network]
+        decimal = tokenList[token]["decimal"]
         console.log("**************************")
-        console.log(token)
-        return token
+        console.log(address)
+        return [address, decimal]
     },
 
     tokenSymbol: (token) => {
@@ -106,7 +73,7 @@ module.exports = {
         abi = tokenList[token]["bridgeAbi"][network]
         decimal = tokenList[token]["decimal"]
         // console.log(abi)
-        return [address, abi,decimal]
+        return [address, abi, decimal]
     },
 
     getTokenDetails: async (req, res) => {
@@ -134,9 +101,6 @@ module.exports = {
             }
 
             decimal = tokenList[token]["decimal"]
-            // bridgeDetails = token.bridgeDetails(tokenId, networkId);
-            // bridgeAddress = bridgeDetails[0]
-            // bridgeAbi = bridgeDetails[0]
 
             console.log("tokenAddress", tokenAddress)
 

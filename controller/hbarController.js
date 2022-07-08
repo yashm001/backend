@@ -4,55 +4,46 @@ var db = require('../db/db.js');
 const mongoose = require('mongoose');
 const tokenList = require('./tokenList')
 const tokenAbi = require('./ABI/tokenAbi.json');
-const chainId = config.chainIdFTM;
-const chainId1 = config.chainIdBSC;
-const connectionURLFTM = config.connectionURLFTM;
-const connectionURLBSC = config.connectionURLBSC;
+const connectionURLHBAR = config.connectionURLHBAR;
 
-
-
-var web3 = new Web3(new Web3.providers.HttpProvider(config.connectionURLETH));
-var web3BSC = new Web3(new Web3.providers.HttpProvider(connectionURLBSC));
-
-const { async } = require('crypto-random-string');
+var web3 = new Web3(new Web3.providers.HttpProvider(config.connectionURLHBAR));
 
 const transactionDetails = mongoose.model('transactionDetails');
 
-var adminAddresses = config.adminAddresses;
 
 
 module.exports = {
 
 
-    vaultBalance: async (req, res) => {
-        try {
-            let token = ''
+    // vaultBalance: async (req, res) => {
+    //     try {
+    //         let token = ''
             
-            if (req.query.token == null) {
-                return res.send({ "status": "false", "message": "token not found" })
-            } else {
-                token = (req.query.token);
-            }
-            console.log("token",token)
-            tokenAddress = tokenList.tokenAddress(token,"CRO");
-            bridgeDetail = tokenList.bridgeDetails(token,"CRO");
-            bridgeAddress = bridgeDetail[0]
+    //         if (req.query.token == null) {
+    //             return res.send({ "status": "false", "message": "token not found" })
+    //         } else {
+    //             token = (req.query.token);
+    //         }
+    //         console.log("token",token)
+    //         tokenAddress = tokenList.tokenAddress(token,"HBAR");
+    //         bridgeDetail = tokenList.bridgeDetails(token,"HBAR");
+    //         bridgeAddress = bridgeDetail[0]
 
-            var tokenContract = await new web3.eth.Contract(tokenAbi, tokenAddress)
-            let output = await tokenContract.methods.balanceOf(bridgeAddress).call()
-            let decimal = await tokenContract.methods.decimals().call()
-            output = output/(10**decimal)
-            res.send({
-                "status": "true",
-                "messgae": "Vault Balance recieved",
-                "vault_balance": output
-            })
+    //         var tokenContract = await new web3.eth.Contract(tokenAbi, tokenAddress)
+    //         let output = await tokenContract.methods.balanceOf(bridgeAddress).call()
+    //         let decimal = await tokenContract.methods.decimals().call()
+    //         output = output/(10**decimal)
+    //         res.send({
+    //             "status": "true",
+    //             "messgae": "Vault Balance recieved",
+    //             "vault_balance": output
+    //         })
 
-        } catch (err) {
-            console.log("error in getting vault balance", err)
-            res.send({ "status": "false", "error": err })
-        }
-    },
+    //     } catch (err) {
+    //         console.log("error in getting vault balance", err)
+    //         res.send({ "status": "false", "error": err })
+    //     }
+    // },
 
     getbalance: async (req, res) => {
         try {
@@ -69,14 +60,22 @@ module.exports = {
                 token = (req.query.token);
             }
             console.log("token",token)
-            tokenAddress = tokenList.tokenAddress(token,"CRO");
-            // console.log("tokenDetails*****************",tokenDetails)
+            tokenDetail = tokenList.tokenDetails(token,"HBAR");
+            tokenAddress = tokenDetail[0]
+            decimal = tokenDetail[1]
+            console.log("tokenDetails*****************",tokenDetail)
             // tokenAddress = tokenDetails[tokenId]
 
             console.log("tokenAddress", tokenAddress)
+            if (tokenAddress == "0x0000000000000000000000000000000000000000") {
+                output = await web3.eth.getBalance(userAddress)
+                output = output/(10**decimal)
+                return res.send({ "status": "true", "messgae": "user balance recieved", "Tokens": output })
+
+            }
+
             var tokenContract = await new web3.eth.Contract(tokenAbi, tokenAddress)
-            let output = await tokenContract.methods.balanceOf(userAddress).call()
-            let decimal = await tokenContract.methods.decimals().call()
+            output = await tokenContract.methods.balanceOf(userAddress).call()
             output = output/(10**decimal)
             console.log("output",output)
            
@@ -103,7 +102,7 @@ module.exports = {
             } else {
                 token = (req.query.token);
             }
-            bridgeDetail = tokenList.bridgeDetails(token,"CRO");
+            bridgeDetail = tokenList.bridgeDetails(token,"HBAR");
             bridgeAddress = bridgeDetail[0]
             bridgeAbi = bridgeDetail[1]
             decimal = bridgeDetail[2]
@@ -112,8 +111,8 @@ module.exports = {
             console.log("amount",amount)
 
             var bridgeContract = await new web3.eth.Contract(bridgeAbi, bridgeAddress)
-            var output = await bridgeContract.methods.feeCalculation(amount).call()
-            output = output/(10**decimal)
+            var output = await bridgeContract.methods.calculateFees(amount).call()
+            output = (parseInt(amount)-parseInt(output))/(10**decimal)
             res.send({"status": "true", "output" : output})
 
         } catch (err) {
@@ -169,7 +168,7 @@ module.exports = {
 
 
             const obj = {
-                fromChain: 'CRO',
+                fromChain: 'HBAR',
                 fromTransactionHash: txHash,
                 fromTransactionStatus: status,
                 fromBlockNumber: receipt['blockNumber'],
@@ -238,8 +237,12 @@ module.exports = {
                 amount = (req.query.amount);
             }
 
-            tokenAddress = tokenList.tokenAddress(token,"CRO");
-            bridgeDetail = tokenList.bridgeDetails(token,"CRO");
+            tokenDetail = tokenList.tokenDetails(token,"HBAR");
+            tokenAddress = tokenDetail[0]
+            if(tokenAddress == "0x0000000000000000000000000000000000000000") {
+                return res.send({"status": "true", "response" : "true"})
+            }
+            bridgeDetail = tokenList.bridgeDetails(token,"HBAR");
             bridgeAddress = bridgeDetail[0]
             decimal = bridgeDetail[2]
 
@@ -275,13 +278,13 @@ module.exports = {
     
             let toChainId = tokenList.toChainId(toChain)
             console.log("toChainId",toChainId)
-            bridgeDetail = tokenList.bridgeDetails(token,"CRO");
+            bridgeDetail = tokenList.bridgeDetails(token,"HBAR");
             bridgeAddress = bridgeDetail[0]
             bridgeAbi = bridgeDetail[1]
             decimal = bridgeDetail[2]
 
             var bridgeContract = await new web3.eth.Contract(bridgeAbi, bridgeAddress)
-            var gasUsed = await bridgeContract.methods.getProcessedFees(toChainId).call();
+            var gasUsed = await bridgeContract.methods.getProcessFees(toChainId).call();
             // var gasUsed = await bridgeContract.methods._processedFees().call();
 
             res.send({ "status": "true", "bridgeFees": gasUsed ,"decimal" :decimal  })

@@ -25,13 +25,13 @@ router.get('/checkAvaxAllowance',avaxController.checkAllowance)
 router.get('/checkHbarAllowance',hbarController.checkAllowance)
 
 
-router.get('/AvaxVaultBalance', avaxController.vaultBalance);                                
-router.get('/HbarVaultBalance', hbarController.vaultBalance);                                
+// router.get('/AvaxVaultBalance', avaxController.vaultBalance);                                
+// router.get('/HbarVaultBalance', hbarController.vaultBalance);                                
 
 router.get('/getContractAddress', tokenList.getTokenDetails);                              
 router.get('/getTrxDetails', avaxController.getTrxDetails);
 
-router.get('/processTxnAvax', avaxController.processTxn);
+// router.get('/processTxnAvax', avaxController.processTxn);
 
 
 module.exports= router

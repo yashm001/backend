@@ -41,7 +41,7 @@ app.use(express.json({limit: '200mb', extended: true}))
 app.use(express.urlencoded({limit: '200mb', extended: true}))
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/api/croge', route); // for production
+app.use('/api/apex', route); // for production
 var port = 4000;
 app.listen(port, (err) => {
     if(err){

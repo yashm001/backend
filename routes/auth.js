@@ -12,7 +12,7 @@ module.exports = function (fileName) {
 				next();
 			}
 			else if(!auth) {
-				next();
+				next(); // auth is disabled
 				// res.end('Auth Fail. Invalid UserName or Password');
 			} else {
 				var tmp = auth.split(' ');
