@@ -5,7 +5,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var logger = require('morgan');
 var app = express();
-
+var serverless = require('serverless-http');
 
 var cors = require('cors');
 // app.use(cors({origin: '*'}));
@@ -42,16 +42,16 @@ app.use(express.urlencoded({limit: '200mb', extended: true}))
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/apex', route); // for production
-var port = 4000;
-app.listen(port, (err) => {
-    if(err){
-        console.log(err);
-    }
-    else{
-      console.log("API running on 4000");
+// var port = 4000;
+// app.listen(port, (err) => {
+//     if(err){
+//         console.log(err);
+//     }
+//     else{
+//       console.log("API running on 4000");
 
-    }
-});
+//     }
+// });
 //For Swagger
 const expressSwagger = require('express-swagger-generator')(app);
 expressSwagger({
@@ -83,4 +83,4 @@ expressSwagger({
  ]
  });
 
-module.exports = app;
+ module.exports.handler = serverless(app);
