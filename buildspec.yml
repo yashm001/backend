@@ -1,9 +1,11 @@
-version: 0.1
+version: 0.2
+run-as: root
+
 phases:
   install:
     commands:
-      - npm install
       - npm install -g serverless
+      - npm install
   build:
     commands:
-      - serverless deploy --stage cicd
+      - serverless deploy --stage ${STAGE_NAME}
