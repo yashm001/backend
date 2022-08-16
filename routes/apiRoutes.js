@@ -4,6 +4,7 @@ const avaxController = require('../controller/avaxController');
 const hbarController = require('../controller/hbarController');
 const ftmController = require('../controller/ftmController');
 const tokenList = require('../controller/tokenList');
+const healthController = require('../controller/healthController');
 
 
 router.get('/balanceOf_AVAX', avaxController.getbalance);                                   
@@ -39,5 +40,6 @@ router.get('/getTrxDetails', avaxController.getTrxDetails);
 
 // router.get('/processTxnAvax', avaxController.processTxn);
 
+router.get('/health', healthController.healthCheck);
 
 module.exports= router
