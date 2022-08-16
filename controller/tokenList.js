@@ -8,6 +8,7 @@ const { async } = require("crypto-random-string");
 toChainId = {
     HBAR : "97", // HBAR chain id -> 298 
     AVAX : "43113", // avax Mainnet -> 43114
+    FTM : "4002", // avax Mainnet -> 43114
 }
 
 tokenList = {
@@ -35,7 +36,33 @@ tokenList = {
             AVAX: require('./ABI/bridgeAVAXAbi.json')
 
         },
+    },
+    FTM:
+    {
+        name: "FTM",
+        symbol: "FTM",
+        decimal: 18,
+        tokenAddress: {
+            FTM: "0x0000000000000000000000000000000000000000",
+            AVAX: "0x382Cf77DD6aD678e93D9dA12398B911e99560F89"
+
+        },
+        tokenAbi: {
+            FTM: require('./ABI/tokenAbi.json'),
+            AVAX: require('./ABI/wrappedTokenABI.json')
+
+        },
+        bridgeAddress: {
+            FTM: "0x3e937B0877E8e88bd8c1CF90085dCE4103611708",
+            AVAX: "0x07a6a165ce1108a5aC4852E205102B18dbdD86D2"
+        },
+        bridgeAbi: {
+            FTM: require('./ABI/bridgeHBARAbi.json'),
+            AVAX: require('./ABI/bridgeAVAXAbi.json')
+
+        },
     }
+    
     
 
 }

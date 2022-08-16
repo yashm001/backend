@@ -4,5 +4,6 @@
           "pass": "CATOSHI"
     },
     "connectionURLAVAX": "https://rpc.ankr.com/avalanche_fuji",
-    "connectionURLHBAR": "https://data-seed-prebsc-2-s2.binance.org:8545"
+    "connectionURLHBAR": "https://data-seed-prebsc-2-s2.binance.org:8545",
+    "connectionURLFTM": "https://rpc.ankr.com/fantom_testnet"
 }
